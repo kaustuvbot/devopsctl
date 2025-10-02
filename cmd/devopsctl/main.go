@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/kaustuvprajapati/devopsctl/internal/cli"
 
 func main() {
-	fmt.Println("devopsctl - Infrastructure Hygiene Toolkit")
+	cli.Execute()
 }
