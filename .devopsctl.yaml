@@ -1,0 +1,13 @@
+# devopsctl configuration
+aws:
+  region: us-east-1
+  profile: default
+  key_age_days: 90
+
+docker:
+  dockerfile_path: Dockerfile
+
+git:
+  repo_size_mb: 500
+  branch_age_days: 90
+  large_file_mb: 50
