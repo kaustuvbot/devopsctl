@@ -1,0 +1,9 @@
+aws:
+  region: eu-west-1
+  profile: staging
+  key_age_days: 60
+
+git:
+  repo_size_mb: 200
+  branch_age_days: 60
+  large_file_mb: 25
