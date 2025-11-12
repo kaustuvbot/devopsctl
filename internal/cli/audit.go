@@ -6,6 +6,7 @@ import (
 	"os"
 
 	awspkg "github.com/kaustuvprajapati/devopsctl/internal/aws"
+	dockerpkg "github.com/kaustuvprajapati/devopsctl/internal/docker"
 	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
 	"github.com/spf13/cobra"
 )
@@ -54,13 +55,42 @@ var auditAWSCmd = &cobra.Command{
 }
 
 var dockerfilePath string
+var dockerImage string
 
 var auditDockerCmd = &cobra.Command{
 	Use:   "docker",
 	Short: "Audit Docker configuration",
-	Long:  `Run static checks against a Dockerfile.`,
+	Long:  `Run static checks against a Dockerfile and optionally scan an image with Trivy.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Docker audit not yet implemented")
+		dockerCfg := AppConfig.Docker
+		if dockerfilePath != "" {
+			dockerCfg.DockerfilePath = dockerfilePath
+		}
+
+		opts := dockerpkg.RunOptions{ImageName: dockerImage}
+		results, err := dockerpkg.RunAll(dockerCfg, opts)
+		if err != nil {
+			return err
+		}
+
+		report := &reporter.Report{Module: "docker", Results: results}
+
+		w, err := resolveWriter(cmd)
+		if err != nil {
+			return err
+		}
+		if w != os.Stdout {
+			defer w.Close()
+		}
+
+		rep := resolveReporter()
+		if err := rep.Render(w, report); err != nil {
+			return err
+		}
+
+		if code := exitCodeForResults(results); code > 0 {
+			os.Exit(code)
+		}
 		return nil
 	},
 }
@@ -76,6 +106,7 @@ var auditGitCmd = &cobra.Command{
 
 func init() {
 	auditDockerCmd.Flags().StringVar(&dockerfilePath, "file", "", "path to Dockerfile (overrides config)")
+	auditDockerCmd.Flags().StringVar(&dockerImage, "image", "", "container image to scan with Trivy")
 	auditCmd.AddCommand(auditAWSCmd)
 	auditCmd.AddCommand(auditDockerCmd)
 	auditCmd.AddCommand(auditGitCmd)
