@@ -15,7 +15,7 @@ devopsctl is a lightweight CLI toolkit for infrastructure hygiene and DevOps val
 - Doctor (aggregator)
 
 This file defines development discipline.
-Functional behavior is defined in PROJECT_SPEC.md and /docs.
+Functional behavior is defined in PROJECT_SPEC.md and /claude_docs.
 
 ---
 
@@ -56,7 +56,7 @@ devopsctl/
 │   ├── terraform/
 │   ├── git/
 │   └── doctor/
-├── docs/
+├── claude_docs/
 │   └── commit_rule.md
 |   └── other feature listing md files.md
 ├── tests/
@@ -69,11 +69,11 @@ devopsctl/
 ## 🧠 Development Discipline
 Claude must:
 - Build incrementally
-- Follow 10-20 commit batch discipline (see docs/commit_rule.md)
+- Follow 10-20 commit batch discipline (see claude_docs/commit_rule.md)
 - Never generate full project at once
 - Keep commits realistic
 - Improve tests gradually
-- Keep docs and code synchronized
+- Keep claude_docs and code synchronized
 
 ---
 
@@ -95,8 +95,8 @@ Exit code must reflect highest severity found.
 
 ## 📚 Documentation Authority
 - PROJECT_SPEC.md defines feature scope
-- /docs defines module contracts
-- docs/commit_rule.md defines commit strategy
+- /claude_docs defines module contracts
+- claude_docs/commit_rule.md defines commit strategy
 - Documentation-first development is mandatory
 
 ---
@@ -113,4 +113,4 @@ Exit code must reflect highest severity found.
 - **Timeline**: Oct 1, 2025 → Feb 15, 2026
 - **Total commits**: ~150 commits
 - **Pattern**: Natural development rhythm
-- **See**: docs/commit_rule.md
+- **See**: claude_docs/commit_rule.md
