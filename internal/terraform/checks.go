@@ -43,3 +43,22 @@ func (c *Checker) CheckFormat() ([]CheckResult, error) {
 	}
 	return results, nil
 }
+
+// CheckValidate runs terraform validate to check configuration validity.
+func (c *Checker) CheckValidate() ([]CheckResult, error) {
+	cmd := exec.Command("terraform", "validate")
+	cmd.Dir = c.workingDir
+	err := cmd.Run()
+
+	var results []CheckResult
+	if err != nil {
+		results = append(results, CheckResult{
+			CheckName:      "terraform-validate",
+			Severity:       severity.High,
+			ResourceID:     c.workingDir,
+			Message:        "Terraform configuration is invalid",
+			Recommendation: "Fix terraform validation errors",
+		})
+	}
+	return results, nil
+}
