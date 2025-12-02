@@ -1,7 +1,10 @@
 package terraform
 
 import (
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 
 	"github.com/kaustuvprajapati/devopsctl/internal/severity"
 )
@@ -60,5 +63,46 @@ func (c *Checker) CheckValidate() ([]CheckResult, error) {
 			Recommendation: "Fix terraform validation errors",
 		})
 	}
+	return results, nil
+}
+
+// CheckProviderVersions checks for unpinned provider versions in terraform files.
+func (c *Checker) CheckProviderVersions() ([]CheckResult, error) {
+	var results []CheckResult
+
+	files, err := filepath.Glob(filepath.Join(c.workingDir, "*.tf"))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, file := range files {
+		content, err := os.ReadFile(file)
+		if err != nil {
+			continue
+		}
+
+		// Simple check: if file has required_providers but no version constraint
+		hasRequiredProviders := false
+		hasVersion := false
+
+		contentStr := string(content)
+		if strings.Contains(contentStr, "required_providers") {
+			hasRequiredProviders = true
+		}
+		if strings.Contains(contentStr, "version") {
+			hasVersion = true
+		}
+
+		if hasRequiredProviders && !hasVersion {
+			results = append(results, CheckResult{
+				CheckName:      "provider-version",
+				Severity:       severity.Medium,
+				ResourceID:     file,
+				Message:        "Provider version constraint not found",
+				Recommendation: "Add version constraint to provider configuration",
+			})
+		}
+	}
+
 	return results, nil
 }
