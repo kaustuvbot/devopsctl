@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/kaustuvprajapati/devopsctl/internal/severity"
@@ -101,6 +102,49 @@ func (c *Checker) CheckProviderVersions() ([]CheckResult, error) {
 				Message:        "Provider version constraint not found",
 				Recommendation: "Add version constraint to provider configuration",
 			})
+		}
+	}
+
+	return results, nil
+}
+
+// CheckCredentials detects hardcoded credentials in terraform files.
+func (c *Checker) CheckCredentials() ([]CheckResult, error) {
+	var results []CheckResult
+
+	// Patterns for detecting hardcoded credentials
+	patterns := map[string]string{
+		"aws_access_key": `AKIA[0-9A-Z]{16}`,
+		"aws_secret_key": `[A-Za-z0-9/+=]{40}`,
+		"password":       `password\s*=\s*"[^"]+"`,
+		"api_key":        `api_key\s*=\s*"[^"]+"`,
+		"secret":         `secret\s*=\s*"[^"]+"`,
+	}
+
+	files, err := filepath.Glob(filepath.Join(c.workingDir, "*.tf"))
+	if err != nil {
+		return nil, err
+	}
+
+	for _, file := range files {
+		content, err := os.ReadFile(file)
+		if err != nil {
+			continue
+		}
+
+		contentStr := string(content)
+
+		for credType, pattern := range patterns {
+			re := regexp.MustCompile(pattern)
+			if re.MatchString(contentStr) {
+				results = append(results, CheckResult{
+					CheckName:      "hardcoded-credentials",
+					Severity:       severity.Critical,
+					ResourceID:     file,
+					Message:        "Hardcoded " + credType + " detected",
+					Recommendation: "Use environment variables or secret management instead",
+				})
+			}
 		}
 	}
 

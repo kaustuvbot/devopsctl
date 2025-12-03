@@ -35,3 +35,13 @@ func TestCheckProviderVersions(t *testing.T) {
 	// Verify function runs without error
 	_ = results
 }
+
+func TestCheckCredentials(t *testing.T) {
+	checker := NewChecker("../../testdata/terraform")
+	results, err := checker.CheckCredentials()
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+	// Verify function runs without error
+	_ = results
+}
