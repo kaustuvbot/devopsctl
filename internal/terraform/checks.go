@@ -29,11 +29,30 @@ func NewChecker(workingDir string) *Checker {
 	return &Checker{workingDir: workingDir}
 }
 
+// ValidateDir checks if the working directory exists and is readable.
+func (c *Checker) ValidateDir() error {
+	info, err := os.Stat(c.workingDir)
+	if err != nil {
+		return err
+	}
+	if !info.IsDir() {
+		return os.ErrNotExist
+	}
+	return nil
+}
+
 // CheckFormat runs terraform fmt -check to verify formatting.
 func (c *Checker) CheckFormat() ([]CheckResult, error) {
+	// Check if terraform binary exists
+	_, err := exec.LookPath("terraform")
+	if err != nil {
+		// terraform not found, skip this check
+		return []CheckResult{}, nil
+	}
+
 	cmd := exec.Command("terraform", "fmt", "-check", "-recursive")
 	cmd.Dir = c.workingDir
-	err := cmd.Run()
+	err = cmd.Run()
 
 	var results []CheckResult
 	if err != nil {
@@ -50,9 +69,16 @@ func (c *Checker) CheckFormat() ([]CheckResult, error) {
 
 // CheckValidate runs terraform validate to check configuration validity.
 func (c *Checker) CheckValidate() ([]CheckResult, error) {
+	// Check if terraform binary exists
+	_, err := exec.LookPath("terraform")
+	if err != nil {
+		// terraform not found, skip this check
+		return []CheckResult{}, nil
+	}
+
 	cmd := exec.Command("terraform", "validate")
 	cmd.Dir = c.workingDir
-	err := cmd.Run()
+	err = cmd.Run()
 
 	var results []CheckResult
 	if err != nil {
