@@ -55,16 +55,17 @@ func CheckRepoSize(ctx context.Context, client *Client, cfg appconfig.GitConfig)
 
 // convertToMB converts a size value to megabytes.
 func convertToMB(value float64, unit string) float64 {
-	switch strings.ToUpper(unit) {
+	unitUpper := strings.ToUpper(unit)
+	switch unitUpper {
 	case "B":
 		return value / (1024 * 1024)
-	case "KB":
+	case "KB", "KIB":
 		return value / 1024
-	case "MB":
+	case "MB", "MIB":
 		return value
-	case "GB":
+	case "GB", "GIB":
 		return value * 1024
-	case "TB":
+	case "TB", "TIB":
 		return value * 1024 * 1024
 	default:
 		return value
