@@ -32,3 +32,4 @@ go.work
 Thumbs.db
 test_script/*
 claude_docs/
+CLAUDE.md
