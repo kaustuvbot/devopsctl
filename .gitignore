@@ -30,4 +30,5 @@ go.work
 # OS
 .DS_Store
 Thumbs.db
-test_script/*docs/
+test_script/*
+claude_docs/
