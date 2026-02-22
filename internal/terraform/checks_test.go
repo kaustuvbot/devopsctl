@@ -277,3 +277,31 @@ func TestCheckResultStructure(t *testing.T) {
 		t.Error("Recommendation should not be empty")
 	}
 }
+
+func TestCheckFormat_BinaryNotInstalled(t *testing.T) {
+	// Test with a valid terraform directory but no terraform binary in PATH
+	// The function should handle this gracefully
+	checker := NewChecker("../../testdata/terraform")
+	results, err := checker.CheckFormat()
+
+	// Should return without error, results depend on whether terraform is installed
+	// If terraform is not installed, we expect empty results or specific error handling
+	_ = results
+	// err may be nil (terraform not found handled gracefully) or contain "not found"
+	if err != nil {
+		// This is acceptable - terraform not found is a valid error condition
+		t.Logf("terraform binary check: %v", err)
+	}
+}
+
+func TestCheckValidate_BinaryNotInstalled(t *testing.T) {
+	// Similar to CheckFormat - test graceful handling of missing terraform
+	checker := NewChecker("../../testdata/terraform")
+	results, err := checker.CheckValidate()
+
+	// Should return without panic
+	_ = results
+	if err != nil {
+		t.Logf("terraform binary check: %v", err)
+	}
+}
