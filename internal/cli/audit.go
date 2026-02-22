@@ -7,6 +7,7 @@ import (
 
 	awspkg "github.com/kaustuvprajapati/devopsctl/internal/aws"
 	dockerpkg "github.com/kaustuvprajapati/devopsctl/internal/docker"
+	gitpkg "github.com/kaustuvprajapati/devopsctl/internal/git"
 	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
 	"github.com/spf13/cobra"
 )
@@ -95,11 +96,46 @@ var auditDockerCmd = &cobra.Command{
 	},
 }
 
+var gitRepoPath string
+
 var auditGitCmd = &cobra.Command{
 	Use:   "git",
 	Short: "Audit Git repository",
+	Long:  `Audit Git repository for hygiene issues: size, stale branches, large files.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("Git audit not yet implemented")
+		repoPath := gitRepoPath
+		if repoPath == "" {
+			cwd, err := os.Getwd()
+			if err != nil {
+				return fmt.Errorf("failed to get current directory: %w", err)
+			}
+			repoPath = cwd
+		}
+
+		runner := gitpkg.NewRunner(repoPath, AppConfig.Git)
+		results, err := runner.RunAll(context.Background())
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "warning: some checks encountered errors: %v\n", err)
+		}
+
+		report := &reporter.Report{Module: "git", Results: results}
+
+		w, err := resolveWriter(cmd)
+		if err != nil {
+			return err
+		}
+		if w != os.Stdout {
+			defer w.Close()
+		}
+
+		rep := resolveReporter()
+		if err := rep.Render(w, report); err != nil {
+			return err
+		}
+
+		if code := exitCodeForResults(results); code > 0 {
+			os.Exit(code)
+		}
 		return nil
 	},
 }
@@ -107,6 +143,7 @@ var auditGitCmd = &cobra.Command{
 func init() {
 	auditDockerCmd.Flags().StringVar(&dockerfilePath, "file", "", "path to Dockerfile (overrides config)")
 	auditDockerCmd.Flags().StringVar(&dockerImage, "image", "", "container image to scan with Trivy")
+	auditGitCmd.Flags().StringVar(&gitRepoPath, "repo", "", "path to Git repository (defaults to current directory)")
 	auditCmd.AddCommand(auditAWSCmd)
 	auditCmd.AddCommand(auditDockerCmd)
 	auditCmd.AddCommand(auditGitCmd)
