@@ -1,0 +1,18 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - gosimple
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+  govet:
+    enable-all: false
+
+issues:
+  exclude-use-default: false
