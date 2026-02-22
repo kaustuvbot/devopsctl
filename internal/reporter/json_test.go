@@ -95,13 +95,17 @@ func TestJSONReporter_PrettyVsCompact(t *testing.T) {
 	// Pretty mode
 	prettyReporter := NewJSONReporter(true)
 	var prettyBuf bytes.Buffer
-	prettyReporter.Render(&prettyBuf, report)
+	if err := prettyReporter.Render(&prettyBuf, report); err != nil {
+		t.Fatalf("pretty render failed: %v", err)
+	}
 	prettyOutput := prettyBuf.String()
 
 	// Compact mode
 	compactReporter := NewJSONReporter(false)
 	var compactBuf bytes.Buffer
-	compactReporter.Render(&compactBuf, report)
+	if err := compactReporter.Render(&compactBuf, report); err != nil {
+		t.Fatalf("compact render failed: %v", err)
+	}
 	compactOutput := compactBuf.String()
 
 	// Pretty output should have indentation

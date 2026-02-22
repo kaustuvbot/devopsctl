@@ -70,8 +70,14 @@ func TestLoadInvalidYAML(t *testing.T) {
 func TestFindConfigFile(t *testing.T) {
 	dir := t.TempDir()
 	oldDir, _ := os.Getwd()
-	os.Chdir(dir)
-	defer os.Chdir(oldDir)
+	if err := os.Chdir(dir); err != nil {
+		t.Fatalf("failed to change to temp dir: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(oldDir); err != nil {
+			t.Logf("failed to restore dir: %v", err)
+		}
+	}()
 
 	// No config file exists
 	result := FindConfigFile()
@@ -80,7 +86,9 @@ func TestFindConfigFile(t *testing.T) {
 	}
 
 	// Create .devopsctl.yaml
-	os.WriteFile(".devopsctl.yaml", []byte("aws:\n  region: test\n"), 0644)
+	if err := os.WriteFile(".devopsctl.yaml", []byte("aws:\n  region: test\n"), 0644); err != nil {
+		t.Fatalf("failed to write test config: %v", err)
+	}
 	result = FindConfigFile()
 	if result != ".devopsctl.yaml" {
 		t.Errorf("expected .devopsctl.yaml, got %s", result)

@@ -16,20 +16,22 @@ func NewMarkdownReporter() *MarkdownReporter {
 
 // Render outputs the report in Markdown format.
 func (r *MarkdownReporter) Render(w io.Writer, report *Report) error {
-	fmt.Fprintf(w, "# %s Audit Report\n\n", titleCase(report.Module))
+	if _, err := fmt.Fprintf(w, "# %s Audit Report\n\n", titleCase(report.Module)); err != nil {
+		return err
+	}
 
 	if len(report.Results) == 0 {
-		fmt.Fprintf(w, "No findings.\n\n")
-		return nil
+		_, err := fmt.Fprintf(w, "No findings.\n\n")
+		return err
 	}
 
 	// Create a tabwriter for alignment
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintf(tw, "| %s | %s | %s | %s |\n", "Severity", "Check", "Resource", "Message")
-	fmt.Fprintf(tw, "| --- | --- | --- | --- |\n")
+	_, _ = fmt.Fprintf(tw, "| %s | %s | %s | %s |\n", "Severity", "Check", "Resource", "Message")
+	_, _ = fmt.Fprintf(tw, "| --- | --- | --- | --- |\n")
 
 	for _, result := range report.Results {
-		fmt.Fprintf(tw, "| %s | %s | %s | %s |\n",
+		_, _ = fmt.Fprintf(tw, "| %s | %s | %s | %s |\n",
 			result.Severity,
 			result.CheckName,
 			result.ResourceID,
@@ -37,19 +39,25 @@ func (r *MarkdownReporter) Render(w io.Writer, report *Report) error {
 		)
 	}
 
-	tw.Flush()
-	fmt.Fprintf(w, "\n")
+	_ = tw.Flush()
+	if _, err := fmt.Fprintf(w, "\n"); err != nil {
+		return err
+	}
 
 	// Add recommendations section
-	fmt.Fprintf(w, "## Recommendations\n\n")
+	if _, err := fmt.Fprintf(w, "## Recommendations\n\n"); err != nil {
+		return err
+	}
 	for _, result := range report.Results {
 		if result.Recommendation != "" {
-			fmt.Fprintf(w, "- **%s**: %s\n", result.CheckName, result.Recommendation)
+			if _, err := fmt.Fprintf(w, "- **%s**: %s\n", result.CheckName, result.Recommendation); err != nil {
+				return err
+			}
 		}
 	}
 
-	fmt.Fprintf(w, "\n")
-	return nil
+	_, err := fmt.Fprintf(w, "\n")
+	return err
 }
 
 // titleCase converts a string to title case.

@@ -43,20 +43,22 @@ func (r *TableReporter) Render(w io.Writer, report *Report) error {
 	// Check if terminal supports colors
 	isTerminal := isTerminal(w)
 
-	fmt.Fprintf(w, "=== %s Audit Results ===\n\n", report.Module)
+	if _, err := fmt.Fprintf(w, "=== %s Audit Results ===\n\n", report.Module); err != nil {
+		return err
+	}
 	if len(report.Results) == 0 {
-		fmt.Fprintln(w, "No issues found.")
-		return nil
+		_, err := fmt.Fprintln(w, "No issues found.")
+		return err
 	}
 	tw := tabwriter.NewWriter(w, 0, 0, 2, ' ', 0)
-	fmt.Fprintln(tw, "SEVERITY\tCHECK NAME\tRESOURCE\tMESSAGE")
-	fmt.Fprintln(tw, "--------\t----------\t--------\t-------")
+	_, _ = fmt.Fprintln(tw, "SEVERITY\tCHECK NAME\tRESOURCE\tMESSAGE")
+	_, _ = fmt.Fprintln(tw, "--------\t----------\t--------\t-------")
 	for _, result := range report.Results {
 		sev := result.Severity
 		if isTerminal {
 			sev = colorize(sev)
 		}
-		fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n",
+		_, _ = fmt.Fprintf(tw, "%s\t%s\t%s\t%s\n",
 			sev, result.CheckName, result.ResourceID, result.Message)
 	}
 	return tw.Flush()

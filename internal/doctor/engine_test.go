@@ -41,7 +41,9 @@ func TestRegistryDuplicateRegistration(t *testing.T) {
 	registry := NewRegistry()
 
 	module := &mockModule{name: "test", results: []reporter.CheckResult{}}
-	registry.Register(module)
+	if err := registry.Register(module); err != nil {
+		t.Fatalf("failed to register module: %v", err)
+	}
 
 	err := registry.Register(module)
 	if err != ErrModuleAlreadyRegistered {
@@ -64,18 +66,22 @@ func TestEngineRunAll(t *testing.T) {
 	engine := NewEngine()
 
 	// Register modules
-	engine.Register(&mockModule{
+	if err := engine.Register(&mockModule{
 		name: "module1",
 		results: []reporter.CheckResult{
 			{CheckName: "check1", Severity: "LOW", ResourceID: "res1"},
 		},
-	})
-	engine.Register(&mockModule{
+	}); err != nil {
+		t.Fatalf("failed to register module1: %v", err)
+	}
+	if err := engine.Register(&mockModule{
 		name: "module2",
 		results: []reporter.CheckResult{
 			{CheckName: "check2", Severity: "HIGH", ResourceID: "res2"},
 		},
-	})
+	}); err != nil {
+		t.Fatalf("failed to register module2: %v", err)
+	}
 
 	reports, err := engine.RunAll(context.Background())
 	if err != nil {
@@ -91,17 +97,21 @@ func TestEngineRunAll(t *testing.T) {
 func TestEnginePartialFailure(t *testing.T) {
 	engine := NewEngine()
 
-	engine.Register(&mockModule{
+	if err := engine.Register(&mockModule{
 		name: "success",
 		results: []reporter.CheckResult{
 			{CheckName: "check1", Severity: "LOW"},
 		},
-	})
-	engine.Register(&mockModule{
+	}); err != nil {
+		t.Fatalf("failed to register success module: %v", err)
+	}
+	if err := engine.Register(&mockModule{
 		name: "failure",
 		results: nil,
 		err:   errors.New("module error"),
-	})
+	}); err != nil {
+		t.Fatalf("failed to register failure module: %v", err)
+	}
 
 	reports, err := engine.RunAll(context.Background())
 	if err == nil {
