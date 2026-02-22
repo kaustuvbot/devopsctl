@@ -33,6 +33,10 @@ var auditAWSCmd = &cobra.Command{
 			fmt.Fprintf(os.Stderr, "warning: some checks encountered errors: %v\n", err)
 		}
 
+		// Apply filters: ignore patterns and quiet mode
+		results = filterByIgnore(results, AppConfig.Ignore.Checks)
+		results = filterBySeverity(results, quiet)
+
 		report := &reporter.Report{Module: "aws", Results: results}
 
 		w, err := resolveWriter(cmd)
@@ -73,6 +77,10 @@ var auditDockerCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+
+		// Apply filters: ignore patterns and quiet mode
+		results = filterByIgnore(results, AppConfig.Ignore.Checks)
+		results = filterBySeverity(results, quiet)
 
 		report := &reporter.Report{Module: "docker", Results: results}
 
@@ -117,6 +125,10 @@ var auditGitCmd = &cobra.Command{
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "warning: some checks encountered errors: %v\n", err)
 		}
+
+		// Apply filters: ignore patterns and quiet mode
+		results = filterByIgnore(results, AppConfig.Ignore.Checks)
+		results = filterBySeverity(results, quiet)
 
 		report := &reporter.Report{Module: "git", Results: results}
 

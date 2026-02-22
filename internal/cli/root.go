@@ -12,6 +12,8 @@ var (
 	cfgFile    string
 	jsonOutput bool
 	outputFile string
+	quiet      bool
+	outputFormat string
 
 	// AppConfig holds the loaded configuration.
 	AppConfig *config.Config
@@ -40,7 +42,9 @@ func Execute() {
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .devopsctl.yaml)")
-	rootCmd.PersistentFlags().BoolVar(&jsonOutput, "json", false, "output in JSON format")
+	rootCmd.PersistentFlags().BoolVar(&jsonOutput, "json", false, "output in JSON format (deprecated, use --format)")
+	rootCmd.PersistentFlags().StringVar(&outputFormat, "format", "table", "output format: table, json, markdown")
+	rootCmd.PersistentFlags().BoolVar(&quiet, "quiet", false, "show only CRITICAL and HIGH severity findings")
 	rootCmd.PersistentFlags().StringVar(&outputFile, "output", "", "write report to file")
 }
 

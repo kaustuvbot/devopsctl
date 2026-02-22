@@ -23,8 +23,20 @@ func resolveWriter(_ *cobra.Command) (io.WriteCloser, error) {
 	return os.Stdout, nil
 }
 
-// resolveReporter returns the appropriate Reporter based on the --json flag.
+// resolveReporter returns the appropriate Reporter based on the --format flag.
+// Falls back to --json flag for backwards compatibility.
 func resolveReporter() reporter.Reporter {
+	// Check --format flag first
+	switch outputFormat {
+	case "json":
+		return reporter.NewJSONReporter(true)
+	case "markdown":
+		return reporter.NewMarkdownReporter()
+	case "table":
+		return reporter.NewTableReporter()
+	}
+
+	// Fallback to deprecated --json flag
 	if jsonOutput {
 		return reporter.NewJSONReporter(true)
 	}
@@ -42,4 +54,40 @@ func exitCodeForResults(results []reporter.CheckResult) int {
 		return 0
 	}
 	return severity.Highest(levels).ExitCode()
+}
+
+// filterByIgnore filters out checks that match any pattern in Ignore.Checks.
+func filterByIgnore(results []reporter.CheckResult, ignorePatterns []string) []reporter.CheckResult {
+	if len(ignorePatterns) == 0 {
+		return results
+	}
+	var filtered []reporter.CheckResult
+	for _, r := range results {
+		skip := false
+		for _, pattern := range ignorePatterns {
+			if r.CheckName == pattern {
+				skip = true
+				break
+			}
+		}
+		if !skip {
+			filtered = append(filtered, r)
+		}
+	}
+	return filtered
+}
+
+// filterBySeverity filters results to only include CRITICAL and HIGH severity
+// when quiet mode is enabled.
+func filterBySeverity(results []reporter.CheckResult, quiet bool) []reporter.CheckResult {
+	if !quiet {
+		return results
+	}
+	var filtered []reporter.CheckResult
+	for _, r := range results {
+		if r.Severity == string(severity.Critical) || r.Severity == string(severity.High) {
+			filtered = append(filtered, r)
+		}
+	}
+	return filtered
 }
