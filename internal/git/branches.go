@@ -58,7 +58,7 @@ func CheckStaleBranches(ctx context.Context, client *Client, cfg appconfig.GitCo
 				CheckName:      "git-stale-branch",
 				Severity:       string(severity.Low),
 				ResourceID:     branch,
-				Message:        "Branch has not been updated in over " + string(rune(cfg.BranchAgeDays)) + " days",
+				Message:        "Branch has not been updated in over " + strconv.Itoa(cfg.BranchAgeDays) + " days",
 				Recommendation: "Consider deleting stale branches or merging/updating them",
 			})
 		}
