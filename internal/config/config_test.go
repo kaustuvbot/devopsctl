@@ -86,3 +86,86 @@ func TestFindConfigFile(t *testing.T) {
 		t.Errorf("expected .devopsctl.yaml, got %s", result)
 	}
 }
+
+func TestDefaultConfig_EnabledFlags(t *testing.T) {
+	cfg := DefaultConfig()
+
+	if !cfg.AWS.Enabled {
+		t.Error("expected AWS.Enabled to default to true")
+	}
+	if !cfg.Docker.Enabled {
+		t.Error("expected Docker.Enabled to default to true")
+	}
+	if !cfg.Terraform.Enabled {
+		t.Error("expected Terraform.Enabled to default to true")
+	}
+	if !cfg.Git.Enabled {
+		t.Error("expected Git.Enabled to default to true")
+	}
+}
+
+func TestDefaultConfig_IgnoreChecks(t *testing.T) {
+	cfg := DefaultConfig()
+
+	if cfg.Ignore.Checks == nil {
+		t.Error("expected Ignore.Checks to be empty slice, got nil")
+	}
+	if len(cfg.Ignore.Checks) != 0 {
+		t.Errorf("expected Ignore.Checks to have length 0, got %d", len(cfg.Ignore.Checks))
+	}
+}
+
+func TestLoad_PartialOverride(t *testing.T) {
+	// Create a temp config file with partial overrides
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".devopsctl.yaml")
+	configContent := `
+aws:
+  enabled: false
+docker:
+  enabled: true
+ignore:
+  checks:
+    - iam-mfa-disabled
+    - s3-public-bucket
+`
+	if err := os.WriteFile(configPath, []byte(configContent), 0644); err != nil {
+		t.Fatalf("failed to write temp config: %v", err)
+	}
+
+	cfg, err := Load(configPath)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// AWS should be disabled
+	if cfg.AWS.Enabled != false {
+		t.Errorf("expected AWS.Enabled to be false, got %v", cfg.AWS.Enabled)
+	}
+
+	// Docker should still be enabled (not set in yaml, should keep default)
+	if !cfg.Docker.Enabled {
+		t.Error("expected Docker.Enabled to be true (default)")
+	}
+
+	// Terraform not set, should keep default
+	if !cfg.Terraform.Enabled {
+		t.Error("expected Terraform.Enabled to be true (default)")
+	}
+
+	// Git not set, should keep default
+	if !cfg.Git.Enabled {
+		t.Error("expected Git.Enabled to be true (default)")
+	}
+
+	// Ignore checks should be populated
+	if len(cfg.Ignore.Checks) != 2 {
+		t.Errorf("expected 2 ignore checks, got %d", len(cfg.Ignore.Checks))
+	}
+	if cfg.Ignore.Checks[0] != "iam-mfa-disabled" {
+		t.Errorf("expected first ignore check to be iam-mfa-disabled, got %s", cfg.Ignore.Checks[0])
+	}
+	if cfg.Ignore.Checks[1] != "s3-public-bucket" {
+		t.Errorf("expected second ignore check to be s3-public-bucket, got %s", cfg.Ignore.Checks[1])
+	}
+}
