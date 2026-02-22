@@ -1,5 +1,7 @@
 package terraform
 
+import "fmt"
+
 // Runner orchestrates terraform validation checks.
 type Runner struct {
 	workingDir string
@@ -15,36 +17,45 @@ func NewRunner(workingDir string) *Runner {
 }
 
 // RunAllChecks runs all terraform checks and returns combined results.
+// Checks that fail are skipped, not fatal - returns partial results.
 func (r *Runner) RunAllChecks() ([]CheckResult, error) {
 	var allResults []CheckResult
+	var errs []string
 
 	// Run format check
 	formatResults, err := r.checker.CheckFormat()
 	if err != nil {
-		return nil, err
+		errs = append(errs, err.Error())
+	} else {
+		allResults = append(allResults, formatResults...)
 	}
-	allResults = append(allResults, formatResults...)
 
 	// Run validate check
 	validateResults, err := r.checker.CheckValidate()
 	if err != nil {
-		return nil, err
+		errs = append(errs, err.Error())
+	} else {
+		allResults = append(allResults, validateResults...)
 	}
-	allResults = append(allResults, validateResults...)
 
 	// Run provider version check
 	providerResults, err := r.checker.CheckProviderVersions()
 	if err != nil {
-		return nil, err
+		errs = append(errs, err.Error())
+	} else {
+		allResults = append(allResults, providerResults...)
 	}
-	allResults = append(allResults, providerResults...)
 
 	// Run credentials check
 	credResults, err := r.checker.CheckCredentials()
 	if err != nil {
-		return nil, err
+		errs = append(errs, err.Error())
+	} else {
+		allResults = append(allResults, credResults...)
 	}
-	allResults = append(allResults, credResults...)
 
+	if len(errs) > 0 {
+		return allResults, fmt.Errorf("some checks failed: %v", errs)
+	}
 	return allResults, nil
 }
