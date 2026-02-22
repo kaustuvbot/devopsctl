@@ -2,6 +2,7 @@ package aws
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -100,5 +101,19 @@ func TestCheckSecurityGroups_NoPublicAccess(t *testing.T) {
 	results, _ := CheckSecurityGroups(context.Background(), mock)
 	if len(results) != 0 {
 		t.Errorf("expected no results for private CIDR, got %d", len(results))
+	}
+}
+
+func TestCheckSecurityGroups_PermissionError(t *testing.T) {
+	mock := &mockEC2Client{
+		describeSecurityGroupsErr: fmt.Errorf("AccessDenied: User is not authorized to perform ec2:DescribeSecurityGroups"),
+	}
+	results, err := CheckSecurityGroups(context.Background(), mock)
+	// Permission errors should be handled gracefully, returning empty results
+	if err != nil {
+		t.Errorf("expected no error for permission denied, got %v", err)
+	}
+	if len(results) != 0 {
+		t.Errorf("expected empty results on permission error, got %d", len(results))
 	}
 }
