@@ -92,3 +92,28 @@ func TestParseDockerfile_NotFound(t *testing.T) {
 		t.Error("expected error for missing file, got nil")
 	}
 }
+
+func TestParseDockerfile_Empty(t *testing.T) {
+	content := ""
+	path := writeTemp(t, content)
+	df, err := ParseDockerfile(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if len(df.Instructions) != 0 {
+		t.Errorf("expected 0 instructions for empty Dockerfile, got %d", len(df.Instructions))
+	}
+}
+
+func TestParseDockerfile_OnlyComments(t *testing.T) {
+	content := "# This is a comment\n# Another comment\n"
+	path := writeTemp(t, content)
+	df, err := ParseDockerfile(path)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	// Comments should be skipped, resulting in no instructions
+	if len(df.Instructions) != 0 {
+		t.Errorf("expected 0 instructions for comment-only Dockerfile, got %d", len(df.Instructions))
+	}
+}
