@@ -10,6 +10,13 @@ A lightweight CLI toolkit for infrastructure hygiene and DevOps validation.
 - Git repository hygiene checks (repo size, large files, stale branches)
 - Aggregated health reports via doctor engine
 
+## Documentation
+
+| Module | Guide |
+|--------|-------|
+| AWS Audit | [docs/AWS.md](docs/AWS.md) |
+| Terraform Validation | [docs/TERRAFORM.md](docs/TERRAFORM.md) |
+
 ## Installation
 
 ```bash
@@ -30,9 +37,11 @@ devopsctl doctor
 ## Global Flags
 
 ```
---json           Output in JSON format
+--format <fmt>   Output format: table, json, markdown (default: table)
+--quiet          Show only CRITICAL and HIGH severity findings
 --output <file>  Write report to file
 --config <file>  Path to config file (default: .devopsctl.yaml)
+--json           Output in JSON format (deprecated, use --format json)
 ```
 
 ## Requirements
