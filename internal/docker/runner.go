@@ -3,8 +3,8 @@ package docker
 import (
 	"fmt"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // RunOptions controls optional Docker audit behaviors.

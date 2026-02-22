@@ -3,7 +3,7 @@ package doctor
 import (
 	"context"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // Module represents an audit/validation module that can be run by the doctor engine.

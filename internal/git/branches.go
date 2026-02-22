@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 // CheckStaleBranches checks if any branches have not been updated in the configured number of days.

@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	ec2types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // CheckEBSEncryption checks for unencrypted EBS volumes.

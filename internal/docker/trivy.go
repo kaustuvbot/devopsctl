@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // trivyVulnerability maps a subset of Trivy's JSON vulnerability fields.

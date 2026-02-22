@@ -124,7 +124,7 @@ Must support:
 
 Must support:
 
-go install github.com/kaustuvprajapati/devopsctl/cmd/devopsctl@latest
+go install github.com/kaustuvbot/devopsctl/cmd/devopsctl@latest
 devopsctl --help
 
 Compatible with Ubuntu 22.04+

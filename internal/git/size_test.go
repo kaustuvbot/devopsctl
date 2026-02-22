@@ -3,7 +3,7 @@ package git
 import (
 	"testing"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
 )
 
 // TestConvertToMB tests all unit conversions

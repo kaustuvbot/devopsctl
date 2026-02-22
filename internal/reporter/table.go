@@ -6,7 +6,7 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 // TableReporter renders check results as a formatted text table.

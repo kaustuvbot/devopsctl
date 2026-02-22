@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 // CheckRepoSize checks if the repository size exceeds the configured threshold.

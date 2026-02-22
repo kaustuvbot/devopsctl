@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 func TestValidateDir(t *testing.T) {

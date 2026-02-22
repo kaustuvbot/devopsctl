@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // ModuleReport holds results from a single module execution.

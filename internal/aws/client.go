@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
 )
 
 // IAMClient is the interface for AWS IAM operations used by devopsctl.

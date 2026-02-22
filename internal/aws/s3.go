@@ -7,7 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // CheckS3PublicBuckets identifies S3 buckets that are publicly accessible.

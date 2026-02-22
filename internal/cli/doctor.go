@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/doctor"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/doctor"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 	"github.com/spf13/cobra"
 )
 

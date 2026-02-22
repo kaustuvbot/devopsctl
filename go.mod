@@ -1,4 +1,4 @@
-module github.com/kaustuvprajapati/devopsctl
+module github.com/kaustuvbot/devopsctl
 
 go 1.23.0
 

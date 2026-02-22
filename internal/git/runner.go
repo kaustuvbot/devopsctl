@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // Runner orchestrates git audit checks.

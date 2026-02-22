@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	awspkg "github.com/kaustuvprajapati/devopsctl/internal/aws"
-	dockerpkg "github.com/kaustuvprajapati/devopsctl/internal/docker"
-	gitpkg "github.com/kaustuvprajapati/devopsctl/internal/git"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	awspkg "github.com/kaustuvbot/devopsctl/internal/aws"
+	dockerpkg "github.com/kaustuvbot/devopsctl/internal/docker"
+	gitpkg "github.com/kaustuvbot/devopsctl/internal/git"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 	"github.com/spf13/cobra"
 )
 

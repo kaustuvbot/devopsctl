@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // mockModule implements Module for testing

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
-	terraformpkg "github.com/kaustuvprajapati/devopsctl/internal/terraform"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
+	terraformpkg "github.com/kaustuvbot/devopsctl/internal/terraform"
 	"github.com/spf13/cobra"
 )
 

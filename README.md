@@ -20,7 +20,7 @@ A lightweight CLI toolkit for infrastructure hygiene and DevOps validation.
 ## Installation
 
 ```bash
-go install github.com/kaustuvprajapati/devopsctl/cmd/devopsctl@latest
+go install github.com/kaustuvbot/devopsctl/cmd/devopsctl@latest
 ```
 
 ## Usage

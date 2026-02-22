@@ -81,7 +81,7 @@ The audit user needs read-only permissions. Attach the following policy to the I
 ## Installation
 
 ```bash
-go install github.com/kaustuvprajapati/devopsctl/cmd/devopsctl@latest
+go install github.com/kaustuvbot/devopsctl/cmd/devopsctl@latest
 ```
 
 Requires Go 1.21+. The binary is statically linked and has no runtime dependencies.
@@ -518,7 +518,7 @@ jobs:
           go-version: '1.23'
 
       - name: Install devopsctl
-        run: go install github.com/kaustuvprajapati/devopsctl/cmd/devopsctl@latest
+        run: go install github.com/kaustuvbot/devopsctl/cmd/devopsctl@latest
 
       - name: Run AWS audit
         env:

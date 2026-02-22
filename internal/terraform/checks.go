@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 // CheckResult represents the result of a terraform check.

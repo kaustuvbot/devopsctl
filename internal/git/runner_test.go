@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	appconfig "github.com/kaustuvprajapati/devopsctl/internal/config"
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
+	appconfig "github.com/kaustuvbot/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
 )
 
 // mockRunnerClient is a mock implementation of git client for testing

@@ -3,8 +3,8 @@ package doctor
 import (
 	"testing"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/reporter"
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	"github.com/kaustuvbot/devopsctl/internal/reporter"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 func TestComputeSummary_AllSeverities(t *testing.T) {

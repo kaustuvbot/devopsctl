@@ -1,7 +1,7 @@
 package doctor
 
 import (
-	"github.com/kaustuvprajapati/devopsctl/internal/severity"
+	"github.com/kaustuvbot/devopsctl/internal/severity"
 )
 
 // Summary holds aggregated scoring information.

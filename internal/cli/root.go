@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kaustuvprajapati/devopsctl/internal/config"
+	"github.com/kaustuvbot/devopsctl/internal/config"
 	"github.com/spf13/cobra"
 )
 
